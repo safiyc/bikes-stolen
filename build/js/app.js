@@ -24,6 +24,26 @@ var Bike = exports.Bike = function () {
         });
       });
     }
+  }, {
+    key: 'listBikeByManufacturer',
+    value: function listBikeByManufacturer(manufacturer) {
+      $.get('https://bikeindex.org:443/api/v3/search?page=1&per_page=25&manufacturer=' + manufacturer).then(function (response) {
+        var list = response.bikes;
+        list.forEach(function (bike) {
+          $('.showBikesMan').append('<li>' + bike.title + '  ' + bike.manufacturer_name + '</li>');
+        });
+      });
+    }
+
+    // listBikeByYear(year){
+    //   $.get(`https://bikeindex.org:443/api/v3/search?page=1&per_page=25&year=${year}`).then(function(response){
+    //     let list = response.bikes
+    //     list.forEach(function(bike){
+    //       $('.showBikesYear').append('<li>' + bike.title + ' ' + bike.year + '</li>');
+    //     });
+    //   });
+    // }
+
   }]);
 
   return Bike;
@@ -35,14 +55,25 @@ var Bike = exports.Bike = function () {
 var _bike = require('./../js/bike.js');
 
 $(document).ready(function () {
+  var bike = new _bike.Bike();
   $('#bikesLocation').click(function () {
     var location = $('#location').val();
     var distance = $('#distance').val();
     $('#location').val("");
     $('#distance').val("");
-    var bike = new _bike.Bike();
+
     bike.listBikeByLocation(location, distance);
   });
+
+  $('#bikesManufacturer').click(function () {
+    var manufacturer = $('#manufacturer').val();
+    bike.listBikeByManufacturer(manufacturer);
+  });
+
+  // $('#bikesYear').click(function () {
+  //   let year = $('#year').val();
+  //   bike.listBikeByYear(year);
+  // })
 });
 
 },{"./../js/bike.js":1}]},{},[2]);
